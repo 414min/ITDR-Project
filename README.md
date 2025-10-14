@@ -1,2 +1,2 @@
-ITDR demo (simulated logs). Use the watcher that tails fake_eve.json to trigger the agent.
-# ITDR-Project
+The ITDR project demonstrates an automated cybersecurity workflow that detects intrusion attempts, immediately encrypts sensitive databases
+to prevent data exfiltration, and allows secure restoration using a passphrase.
