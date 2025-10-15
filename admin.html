@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ITDR — Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static_files', filename='style.css') }}">
+</head>
+<body class="bg">
+  <header class="topbar">
+  <div class="brand">Ministry of Data Protection — ITDR</div>
+  <div class="minor">
+    Operational Dashboard
+    <a href="{{ url_for('logout') }}" class="btn small" style="margin-left:20px;">Logout</a>
+  </div>
+</header>
+  <main class="container">
+    <section class="overview">
+      <div class="card stat">
+        <div class="stat-title">Citizens</div>
+        <div class="stat-value">{{ overview.citizen_count }}</div>
+      </div>
+      <div class="card stat">
+        <div class="stat-title">Archives</div>
+        <div class="stat-value">{{ overview.archive_count }}</div>
+      </div>
+      <div class="card stat">
+        <div class="stat-title">Last Encrypted</div>
+        <div class="stat-value">{{ overview.last_encrypted or '—' }}</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card big">
+        <h2>Citizen Records</h2>
+        {% if citizens %}
+        <table class="table">
+          <thead><tr><th>ID</th><th>National ID</th><th>Full Name</th><th>DOB</th></tr></thead>
+          <tbody>
+            {% for r in citizens %}
+              <tr><td>{{ r[0] }}</td><td>{{ r[1] }}</td><td>{{ r[2] }}</td><td>{{ r[3] }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+          <p>No citizen records.</p>
+        {% endif %}
+      </div>
+
+      <div class="card side">
+        <h2>Archives & Restore</h2>
+        {% if overview.archives %}
+          <ul class="archives">
+            {% for a in overview.archives %}
+              <li>
+                <div class="afile">
+                  <div class="aname">{{ a.name }}</div>
+                  <div class="asize">{{ (a.size/1024)|round(1) }} KB</div>
+                </div>
+                <form method="post" action="{{ url_for('restore') }}" class="restore-form">
+                  <input type="hidden" name="archive" value="{{ a.name }}">
+                  <input type="password" name="passphrase" placeholder="Passphrase" required>
+                  <button class="btn small">Restore</button>
+                </form>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No archives available.</p>
+        {% endif %}
+
+        <h3>Recent Alerts</h3>
+        <div class="alerts">
+          {% if alerts %}
+            {% for al in alerts %}
+              <div class="alert-row">
+                <div class="atime">{{ al.timestamp or '' }}</div>
+                <div class="amsg">{{ (al.alert.signature if al.get('alert') else (al.raw[:80] if al.get('raw') else '')) }}</div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p>No alerts.</p>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <section class="card audit">
+      <h2>Audit Trail (latest)</h2>
+      <pre class="audit-pre">
+{% for line in audit %}
+{{ line }}
+{% endfor %}
+      </pre>
+    </section>
+  </main>
+</body>
+</html>
+
