@@ -1,1 +1,1 @@
-The Intrusion-Triggered Data Resilience (ITDR) project demonstrates an automated cybersecurity workflow that detects intrusion attempts, immediately encrypts sensitive databases to prevent data exfiltration, and allows secure restoration using a passphrase.
+Intrusion-Triggered Data Resilience (ITDR) project demonstrates an automated cybersecurity workflow that detects intrusion attempts, immediately encrypts sensitive databases to prevent data exfiltration, and allows secure restoration using a passphrase.
